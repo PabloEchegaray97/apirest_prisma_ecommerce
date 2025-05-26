@@ -1,92 +1,49 @@
 import bcrypt from 'bcrypt';
+import { BaseService } from './base.service';
 import prisma from './prisma.service';
 import { UserCreateInput, UserUpdateInput } from '../models/user.model';
 import { validatePass } from './passService';
-import { generateToken } from './authService';
-import { Prisma } from '../generated/prisma';
+import { generateToken} from './authService';
+import { User } from '../models/user.model';
 import { UserRole } from '../models/enums';
+export class UserService extends BaseService<User, UserCreateInput, UserUpdateInput> {
+  protected modelName = 'user';
+  protected selectFields = {
+    id: true,
+    name: true,
+    email: true,
+    password: false,
+  };
 
-export class UserService {
-  async findAll() {
-    return prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        password: true,
-      },
-    });
-  }
-
-  async findById(id: number) {
-    return prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        password: false,
-      },
-    });
-  }
-
-  async create(data: UserCreateInput) {
+  // Override del método create para manejar el hash de la contraseña
+  async create(data: UserCreateInput): Promise<User> {
     if (!data.password) {
       throw new Error('Password is required');
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    return prisma.user.create({
-      data: {
-        ...data,
-        password: hashedPassword,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        password: false,
-      },
+    return super.create({
+      ...data,
+      password: hashedPassword,
     });
   }
 
-  async update(id: number, data: UserUpdateInput) {
-    let hashedPassword: string | undefined;
+  // Override del método update para manejar el hash de la contraseña
+  async update(id: number, data: UserUpdateInput): Promise<User> {
+    let updateData = { ...data };
     
     if (data.password) {
-      hashedPassword = await bcrypt.hash(data.password, 10);
+      const hashedPassword = await bcrypt.hash(data.password, 10);
+      updateData = { ...updateData, password: hashedPassword };
     }
 
-    return prisma.user.update({
-      where: { id },
-      data: {
-        ...data,
-        ...(hashedPassword && { password: hashedPassword }),
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        password: false,
-      },
-    });
+    return super.update(id, updateData);
   }
 
-  async delete(id: number) {
-    return prisma.user.delete({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        password: false,
-      },
-    });
-  }
-
+  // Método específico para encontrar usuario por email (necesario para login)
   async findByEmail(email: string) {
-    return prisma.user.findFirst({
+    return (prisma as any).user.findFirst({
       where: { 
         email: {
           equals: email,
@@ -103,6 +60,7 @@ export class UserService {
     });
   }
 
+  // Método específico de login
   async login(email: string, password: string) {
     try {
       const user = await this.findByEmail(email);

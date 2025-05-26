@@ -1,28 +1,26 @@
 import express, { Request, Response } from 'express';
-import { UserController } from '../controllers/user.controller';
+import userController from '../controllers/user.controller';
 import { validateJWT } from '../middlewares/validateJWT';
 
 const router = express.Router();
-const controller = new UserController();
 
 router.get('/', validateJWT, async (req: Request, res: Response) => {
-    await controller.getAll(req, res);
+    await userController.getAll(req, res);
 });
 router.get('/:id', validateJWT, async (req: Request, res: Response) => {
-    await controller.getById(req, res);
+    await userController.getById(req, res);
 });
 router.put('/:id', validateJWT,  async (req: Request, res: Response) => {
-    await controller.update(req, res);
+    await userController.update(req, res);
 });
 router.delete('/:id', validateJWT, async (req: Request, res: Response) => {
-    await controller.delete(req, res);
+    await userController.delete(req, res);
 });
 router.post('/register', async (req: Request, res: Response) => {
-    await controller.create(req, res);
+    await userController.create(req, res);
 });
 router.post('/login', async (req: Request, res: Response) => {
-    await controller.login(req, res);
+    await userController.login(req, res);
 });
 
-
-export { router as usuarioRouter }; 
+export { router as userRouter }; 

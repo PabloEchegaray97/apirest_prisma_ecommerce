@@ -38,132 +38,132 @@ enum PaymentMethod {
 
 // Models
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  lastName  String?
-  username  String?
-  email     String?
-  password  String?
-  role      UserRole?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  active    Boolean  @default(true)
+  id                      Int      @id @default(autoincrement())
+  name                    String?
+  lastName                String?
+  username                String?  @unique
+  email                   String?  @unique
+  password                String?
+  role                    UserRole?
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  active                  Boolean  @default(true)
 
   // Relations
-  addresses UsersAddress[]
-  orders    PurchaseOrder[]
+  addresses               UsersAddress[]
+  orders                  PurchaseOrder[]
 
   @@map("users")
 }
 
 model Address {
-  id        Int      @id @default(autoincrement())
-  street    String?
-  town      String?
-  state     String?
-  cpi       String?
-  country   String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  active    Boolean  @default(true)
+  id                      Int      @id @default(autoincrement())
+  street                  String?
+  town                    String?
+  state                   String?
+  cpi                     String?
+  country                 String?
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  active                  Boolean  @default(true)
 
   // Relations
-  users     UsersAddress[]
+  users                   UsersAddress[]
 
   @@map("addresses")
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  typeId    Int?     @map("type_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  active    Boolean  @default(true)
+  id                      Int      @id @default(autoincrement())
+  name                    String?  @unique
+  typeId                  Int?     @map("type_id")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  active                  Boolean  @default(true)
 
   // Relations
-  type      Type?    @relation(fields: [typeId], references: [id])
-  products  Product[]
+  type                    Type?    @relation(fields: [typeId], references: [id])
+  products                Product[]
 
   @@map("categories")
 }
 
 model Type {
-  id         Int        @id @default(autoincrement())
-  name       String?
-  createdAt  DateTime   @default(now()) @map("created_at")
-  updatedAt  DateTime   @updatedAt @map("updated_at")
-  active     Boolean    @default(true)
+  id                      Int        @id @default(autoincrement())
+  name                    String?    @unique
+  createdAt               DateTime   @default(now()) @map("created_at")
+  updatedAt               DateTime   @updatedAt @map("updated_at")
+  active                  Boolean    @default(true)
 
   // Relations
-  categories Category[]
+  categories              Category[]
 
   @@map("types")
 }
 
 model Detail {
-  id         Int            @id @default(autoincrement())
-  quantity   Int?
-  productId  Int?          @map("product_id")
-  orderId    Int?          @map("order_id")
-  createdAt  DateTime      @default(now()) @map("created_at")
-  updatedAt  DateTime      @updatedAt @map("updated_at")
-  active     Boolean       @default(true)
+  id                      Int            @id @default(autoincrement())
+  quantity                Int?
+  productId               Int?          @map("product_id")
+  orderId                 Int?          @map("order_id")
+  createdAt               DateTime      @default(now()) @map("created_at")
+  updatedAt               DateTime      @updatedAt @map("updated_at")
+  active                  Boolean       @default(true)
 
   // Relations
-  product       Product?      @relation(fields: [productId], references: [id])
-  purchaseOrder PurchaseOrder? @relation(fields: [orderId], references: [id])
+  product                 Product?      @relation(fields: [productId], references: [id])
+  purchaseOrder           PurchaseOrder? @relation(fields: [orderId], references: [id])
 
   @@map("details")
 }
 
 model Discount {
-  id                 Int       @id @default(autoincrement())
-  startDate         DateTime? @map("start_date")
-  endDate           DateTime? @map("end_date")
-  discountPercentage Int?     @map("discount_percentage")
-  createdAt         DateTime  @default(now()) @map("created_at")
-  updatedAt         DateTime  @updatedAt @map("updated_at")
-  active            Boolean   @default(true)
+  id                      Int       @id @default(autoincrement())
+  startDate               DateTime? @map("start_date")
+  endDate                 DateTime? @map("end_date")
+  discountPercentage      Int?     @map("discount_percentage")
+  createdAt               DateTime  @default(now()) @map("created_at")
+  updatedAt               DateTime  @updatedAt @map("updated_at")
+  active                  Boolean   @default(true)
 
   // Relations
-  products          ProductDiscount[]
+  products                ProductDiscount[]
 
   @@map("discounts")
 }
 
 model Product {
-  id          Int       @id @default(autoincrement())
-  name        String?
-  price       Float?    
-  description String?
-  image       String?
-  categoryId  Int?      @map("id_category") //modificar en spring
-  colourId    Int?      @map("id_colour") //agregar a spring
-  brandId     Int?      @map("brand_id") //agregar a spring
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-  active      Boolean   @default(true)
+  id                      Int       @id @default(autoincrement())
+  name                    String?   @unique
+  price                   Float?    
+  description             String?
+  image                   String?
+  categoryId              Int?      @map("id_category") //modificar en spring
+  colourId                Int?      @map("id_colour") //agregar a spring
+  brandId                 Int?      @map("brand_id") //agregar a spring
+  createdAt               DateTime  @default(now()) @map("created_at")
+  updatedAt               DateTime  @updatedAt @map("updated_at")
+  active                  Boolean   @default(true)
 
   // Relations
-  category    Category? @relation(fields: [categoryId], references: [id])
-  brand       Brand?    @relation(fields: [brandId], references: [id])
-  colour      Colour?   @relation(fields: [colourId], references: [id])
-  sizes       ProductSize[]
-  images      ProductImage[]
-  discounts   ProductDiscount[]
-  details     Detail[]
+  category                Category? @relation(fields: [categoryId], references: [id])
+  brand                   Brand?    @relation(fields: [brandId], references: [id])
+  colour                  Colour?   @relation(fields: [colourId], references: [id])
+  sizes                   ProductSize[]
+  images                  ProductImage[]
+  discounts               ProductDiscount[]
+  details                 Detail[]
 
   @@map("products")
 }
 
 model ProductDiscount {
-  idDiscount Int      @map("id_discount")
-  idProduct  Int      @map("id_product")
+  idDiscount              Int      @map("id_discount")
+  idProduct               Int      @map("id_product")
 
   // Relations
-  discount   Discount @relation(fields: [idDiscount], references: [id])
-  product    Product  @relation(fields: [idProduct], references: [id])
+  discount                Discount @relation(fields: [idDiscount], references: [id])
+  product                 Product  @relation(fields: [idProduct], references: [id])
 
   @@id([idDiscount, idProduct])
   @@map("product_discounts")
@@ -185,85 +185,85 @@ model ProductImage {
 }
 
 model ProductSize {
-  idSize    Int     @map("id_size")
-  idProduct Int     @map("id_product")
+  idSize                  Int     @map("id_size")
+  idProduct               Int     @map("id_product")
 
   // Relations
-  size      Size    @relation(fields: [idSize], references: [id])
-  product   Product @relation(fields: [idProduct], references: [id])
+  size                    Size    @relation(fields: [idSize], references: [id])
+  product                 Product @relation(fields: [idProduct], references: [id])
 
   @@id([idSize, idProduct])
   @@map("product_sizes")
 }
 
 model PurchaseOrder {
-  id            Int      @id @default(autoincrement())
-  userId        Int?     @map("user_id")
-  userAddressId Int?     @map("user_address_id")
-  total         Float?       
-  paymentMethod PaymentMethod?  @map("payment_method")
-  status        Status?      
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-  active        Boolean  @default(true)
+  id                      Int      @id @default(autoincrement())
+  userId                  Int?     @map("user_id")
+  userAddressId           Int?     @map("user_address_id")
+  total                   Float?       
+  paymentMethod           PaymentMethod?  @map("payment_method")
+  status                  Status?      
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  active                  Boolean  @default(true)
 
   // Relations
-  user          User?        @relation(fields: [userId], references: [id])
-  usersAddress  UsersAddress? @relation(fields: [userId, userAddressId], references: [userId, addressId])
-  details       Detail[]
+  user                    User?        @relation(fields: [userId], references: [id])
+  usersAddress            UsersAddress? @relation(fields: [userId, userAddressId], references: [userId, addressId])
+  details                 Detail[]
 
   @@map("purchase_orders")
 }
 
 model Size {
-  id         Int         @id @default(autoincrement())
-  number     String
-  systemType SystemType? @map("system_type")
-  createdAt  DateTime    @default(now()) @map("created_at")
-  updatedAt  DateTime    @updatedAt @map("updated_at")
-  active     Boolean     @default(true)
+  id                      Int         @id @default(autoincrement())
+  number                  String      
+  systemType              SystemType? @map("system_type")
+  createdAt               DateTime    @default(now()) @map("created_at")
+  updatedAt               DateTime    @updatedAt @map("updated_at")
+  active                  Boolean     @default(true)
 
   // Relations
-  products   ProductSize[]
+  products                ProductSize[]
   
   @@map("sizes")
 }
 
 model UsersAddress {
-  userId    Int    @map("user_id")
-  addressId Int    @map("address_id")
+  userId                  Int    @map("user_id")
+  addressId               Int    @map("address_id")
 
   // Relations
-  user           User    @relation(fields: [userId], references: [id])
-  address        Address @relation(fields: [addressId], references: [id])
-  purchaseOrders PurchaseOrder[]
+  user                    User    @relation(fields: [userId], references: [id])
+  address                 Address @relation(fields: [addressId], references: [id])
+  purchaseOrders          PurchaseOrder[]
 
   @@id([userId, addressId])
   @@map("user_addresses")
 }
 //agregar a spring
 model Brand {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  active    Boolean  @default(true)
+  id                      Int      @id @default(autoincrement())
+  name                    String?  @unique
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  active                  Boolean  @default(true)
 
   // Relations
-  products  Product[]
+  products                Product[]
 
   @@map("brands")
 }
 //agregar a spring
 model Colour {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  active    Boolean  @default(true)
+  id                      Int      @id @default(autoincrement())
+  name                    String   @unique
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  active                  Boolean  @default(true)
 
   // Relations
-  products  Product[]
+  products                Product[]
 
   @@map("colours")
 }
