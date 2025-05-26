@@ -8,7 +8,11 @@ export const validateJWT = (req: Request, res: Response, next: NextFunction) => 
     }
     try {
         const decoded = verify(token, process.env.JWT_SECRET_KEY || 'default_secret_key');
-        return res.status(200).json({ message: 'Token validado', decoded });
+        // Agregar el usuario decodificado al request para uso posterior
+        (req as any).user = decoded;
+        console.log('Token validado para usuario:', decoded);
+        // Continuar al siguiente middleware
+        next();
     } catch (error) {
         return res.status(401).json({ message: 'Invalid token' });
     }

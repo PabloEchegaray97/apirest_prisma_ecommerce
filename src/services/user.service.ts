@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import { BaseService } from './base.service';
-import prisma from './prisma.service';
+import prisma from './prisma/prisma.service';
 import { UserCreateInput, UserUpdateInput } from '../models/user.model';
-import { validatePass } from './passService';
-import { generateToken} from './authService';
+import { validatePass } from './auth/passService';
+import { generateToken} from './auth/authService';
 import { User } from '../models/user.model';
 import { UserRole } from '../models/enums';
 export class UserService extends BaseService<User, UserCreateInput, UserUpdateInput> {

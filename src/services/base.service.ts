@@ -1,4 +1,4 @@
-import prisma from './prisma.service';
+import prisma from './prisma/prisma.service';
 
 export abstract class BaseService<T, CreateInput, UpdateInput> {
   protected abstract modelName: string;
