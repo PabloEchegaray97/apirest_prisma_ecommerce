@@ -20,8 +20,8 @@ npm install
 ```
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
-POSTGRES_DB=biblioteca
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/biblioteca"
+POSTGRES_DB=db_ecommerce_prisma_node
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/db_ecommerce_prisma_node"
 ```
 
 4. Iniciar la base de datos PostgreSQL con Docker:

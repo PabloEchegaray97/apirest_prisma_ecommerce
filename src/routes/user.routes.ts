@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
-import { UsuarioController } from '../controllers/usuario.controller';
+import { UserController } from '../controllers/user.controller';
 import { validateJWT } from '../middlewares/validateJWT';
 
 const router = express.Router();
-const controller = new UsuarioController();
+const controller = new UserController();
 
 router.get('/', validateJWT, async (req: Request, res: Response) => {
     await controller.getAll(req, res);
