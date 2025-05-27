@@ -13,3 +13,15 @@ export interface ProductDiscount {
   product?: Product;
   discount?: Discount;
 }
+
+export interface ProductDiscountCreateInput {
+  idProduct: number;
+  idDiscount: number;
+}
+
+export interface ProductDiscountUpdateInput {
+  idProduct: number;
+  idDiscount: number;
+  active: boolean;
+}
+

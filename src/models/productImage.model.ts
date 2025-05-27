@@ -8,7 +8,19 @@ export interface ProductImage {
   createdAt: Date;
   updatedAt: Date;
   active: boolean;
-
   // Relations
   product?: Product;
-} 
+}
+
+export interface ProductImageCreateInput {
+  link: string | null;
+  productId: number | null;
+  isPrincipalProductImage: boolean;
+}
+
+export interface ProductImageUpdateInput {
+  link: string | null;
+  productId: number | null;
+  isPrincipalProductImage: boolean;
+  active: boolean;
+}

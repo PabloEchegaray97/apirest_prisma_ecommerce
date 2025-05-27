@@ -28,3 +28,26 @@ export interface Product {
   sizes?: ProductSize[];
   images?: ProductImage[];
 }
+
+export interface ProductCreateInput {
+  name: string | null;
+  description: string | null;
+  price: number | null;
+  stock: number | null;
+  image: string | null;
+  categoryId: number | null;
+  colourId: number | null;
+  brandId: number | null;
+}
+
+export interface ProductUpdateInput {
+  name: string | null;
+  description: string | null;
+  price: number | null;
+  stock: number | null;
+  image: string | null;
+  categoryId: number | null;
+  colourId: number | null;
+  brandId: number | null;
+  active: boolean;
+}

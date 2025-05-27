@@ -11,3 +11,16 @@ export interface Discount {
 
   products?: Product[];
 }
+
+export interface DiscountCreateInput {
+  startDate: Date | null;
+  endDate: Date | null;
+  discountPercentage: number | null;
+}
+
+export interface DiscountUpdateInput {
+  startDate: Date | null;
+  endDate: Date | null;
+  discountPercentage: number | null;
+  active: boolean;
+}

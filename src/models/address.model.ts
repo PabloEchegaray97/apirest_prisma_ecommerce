@@ -13,3 +13,21 @@ export interface Address {
 
   userAddress?: UserAddress[]; 
 }
+
+export interface AddressCreateInput {
+  street: string | null;
+  town: string | null;
+  state: string | null;
+  cpi: string | null;
+  country: string | null;
+}
+
+export interface AddressUpdateInput {
+  street: string | null;
+  town: string | null;
+  state: string | null;
+  cpi: string | null;
+  country: string | null;
+  active: boolean;
+}
+

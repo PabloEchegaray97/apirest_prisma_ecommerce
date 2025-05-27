@@ -1,19 +1,19 @@
 import { UserRole } from "./enums";
 import { PurchaseOrder } from "./purchaseOrder.model";
-import { UsersAddress } from "./userAddress.model";
+import { UserAddress } from "./userAddress.model";
 
 export interface User {
   id: number;
   name: string | null;
   lastName: string | null;
   username: string | null;
-  email: string | null;
+  email: string | null ;
   password: string | null;
   role: UserRole | null;
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
-  addresses?: UsersAddress[];
+  addresses?: UserAddress[];
   orders?: PurchaseOrder[];
 }
 

@@ -1,21 +1,15 @@
 import bcrypt from 'bcrypt';
 import { BaseService } from './base.service';
 import prisma from './prisma/prisma.service';
-import { UserCreateInput, UserUpdateInput } from '../models/user.model';
+import { UserCreateInput, UserUpdateInput, User } from '../models/user.model';
 import { validatePass } from './auth/passService';
 import { generateToken} from './auth/authService';
-import { User } from '../models/user.model';
 import { UserRole } from '../models/enums';
 export class UserService extends BaseService<User, UserCreateInput, UserUpdateInput> {
   protected modelName = 'user';
-  protected selectFields = {
-    id: true,
-    name: true,
-    email: true,
-    password: false,
-  };
+  protected selectFields = {}; // obj vacio = traer todos los campos
 
-  // Override del método create para manejar el hash de la contraseña
+  // override del metodo create para manejar el hash de la contraseña
   async create(data: UserCreateInput): Promise<User> {
     if (!data.password) {
       throw new Error('Password is required');
@@ -29,7 +23,7 @@ export class UserService extends BaseService<User, UserCreateInput, UserUpdateIn
     });
   }
 
-  // Override del método update para manejar el hash de la contraseña
+  // override del metodo update para manejar el hash de la contraseña
   async update(id: number, data: UserUpdateInput): Promise<User> {
     let updateData = { ...data };
     
@@ -41,7 +35,7 @@ export class UserService extends BaseService<User, UserCreateInput, UserUpdateIn
     return super.update(id, updateData);
   }
 
-  // Método específico para encontrar usuario por email (necesario para login)
+  // metodo especifico para encontrar usuario por email (necesario para login)
   async findByEmail(email: string) {
     return (prisma as any).user.findFirst({
       where: { 
@@ -60,7 +54,7 @@ export class UserService extends BaseService<User, UserCreateInput, UserUpdateIn
     });
   }
 
-  // Método específico de login
+  // metodo especifico de login
   async login(email: string, password: string) {
     try {
       const user = await this.findByEmail(email);

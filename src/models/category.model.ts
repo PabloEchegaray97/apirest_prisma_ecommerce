@@ -12,3 +12,14 @@ export interface Category {
   products?: Product[];
   type?: Type;
 }
+
+export interface CategoryCreateInput {
+  name: string | null;
+  typeId: number | null;
+}
+
+export interface CategoryUpdateInput {
+  name: string | null;
+  typeId: number | null;
+  active: boolean;
+}
