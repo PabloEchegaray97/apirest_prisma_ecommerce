@@ -1,8 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
+
 import { userRouter } from './routes/user.routes';
 import { authRouter } from './routes/auth.routes';
-import cors from 'cors';
 import { userAddressRouter } from './routes/userAddress.routes';
 import { addressRouter } from './routes/address.routes';
 import { brandRouter } from './routes/brand.routes';
@@ -15,6 +16,7 @@ import { detailRouter } from './routes/detail.routes';
 import { sizeRouter } from './routes/size.routes';
 import { typeRouter } from './routes/type.routes';
 import { productRouter } from './routes/product.routes';
+import { colourRouter } from './routes/colour.routes';
 
 dotenv.config();
 const app = express();
@@ -41,6 +43,7 @@ app.use(`${API_PREFIX}/product-sizes`, productSizeRouter);
 app.use(`${API_PREFIX}/purchase-orders`, purchaseOrderRouter);
 app.use(`${API_PREFIX}/sizes`, sizeRouter);
 app.use(`${API_PREFIX}/types`, typeRouter);
+app.use(`${API_PREFIX}/colours`, colourRouter);
 
 
 app.get('/', (req, res) => {

@@ -9,6 +9,39 @@ export class UserService extends BaseService<User, UserCreateInput, UserUpdateIn
   protected modelName = 'user';
   protected selectFields = {}; // obj vacio = traer todos los campos
 
+  // incluir relaciones
+  protected includeRelations = {
+    addresses: {
+      include: {
+        address: true
+      }
+    },
+    orders: {
+      where: { active: true },
+      include: {
+        details: {
+          include: {
+            product: {
+              include: {
+                brand: true,
+                category: true,
+                colour: true,
+                images: {
+                  where: { isPrincipalProductImage: true }
+                }
+              }
+            }
+          }
+        },
+        userAddress: {
+          include: {
+            address: true
+          }
+        }
+      }
+    }
+  };
+
   // override del metodo create para manejar el hash de la contraseña
   async create(data: UserCreateInput): Promise<User> {
     if (!data.password) {

@@ -4,4 +4,20 @@ import { AddressCreateInput, AddressUpdateInput, Address } from '../models/addre
 export class AddressService extends BaseService<Address, AddressCreateInput, AddressUpdateInput> {
   protected modelName = 'address';
   protected selectFields = {}; // obj vacio = traer todos los campos
+  
+  // incluir relaciones
+  protected includeRelations = {
+    users: {
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
+    }
+  };
 } 

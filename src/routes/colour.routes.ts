@@ -1,23 +1,23 @@
 import express, { Request, Response } from 'express';
-import productSizeController from '../controllers/productSize.controller';
+import colourController from '../controllers/colour.controller';
 import { validateJWT } from '../middlewares/validateJWT';
 
 const router = express.Router();
 
 router.get('/', validateJWT, async (req: Request, res: Response) => {
-    await productSizeController.getAll(req, res);
+    await colourController.getAll(req, res);
 });
 router.get('/:id', validateJWT, async (req: Request, res: Response) => {
-    await productSizeController.getById(req, res);
+    await colourController.getById(req, res);
 });
 router.put('/:id', validateJWT,  async (req: Request, res: Response) => {
-    await productSizeController.update(req, res);
+    await colourController.update(req, res);
 });
 router.delete('/:id', validateJWT, async (req: Request, res: Response) => {
-    await productSizeController.delete(req, res);
+    await colourController.delete(req, res);
 });
 router.post('/', validateJWT, async (req: Request, res: Response) => {
-    await productSizeController.create(req, res);
+    await colourController.create(req, res);
 });
 
-export { router as productSizeRouter }; 
+export { router as colourRouter }; 

@@ -1,18 +1,17 @@
 import { BaseService } from './base.service';
-import { CategoryCreateInput, CategoryUpdateInput, Category } from '../models/category.model';
+import { Colour, ColourCreateInput, ColourUpdateInput } from '../models/colour.model';
 
-export class CategoryService extends BaseService<Category, CategoryCreateInput, CategoryUpdateInput> {
-  protected modelName = 'category';
+export class ColourService extends BaseService<Colour, ColourCreateInput, ColourUpdateInput> {
+  protected modelName = 'colour';
   protected selectFields = {}; // obj vacio = traer todos los campos
   
   // incluir relaciones
   protected includeRelations = {
-    type: true,
     products: {
       where: { active: true },
       include: {
         brand: true,
-        colour: true,
+        category: true,
         images: {
           where: { isPrincipalProductImage: true }
         }

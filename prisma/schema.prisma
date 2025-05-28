@@ -138,6 +138,7 @@ model Product {
   price                   Float?    
   description             String?
   image                   String?
+  stock                   Int?
   categoryId              Int?      @map("id_category") //modificar en spring
   colourId                Int?      @map("id_colour") //agregar a spring
   brandId                 Int?      @map("brand_id") //agregar a spring
@@ -258,6 +259,7 @@ model Brand {
 model Colour {
   id                      Int      @id @default(autoincrement())
   name                    String   @unique
+  value                   String
   createdAt               DateTime @default(now()) @map("created_at")
   updatedAt               DateTime @updatedAt @map("updated_at")
   active                  Boolean  @default(true)

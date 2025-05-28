@@ -1,106 +1,45 @@
-/*
-  Warnings:
+-- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('ADMIN', 'CLIENT');
 
-  - You are about to drop the column `brand` on the `products` table. All the data in the column will be lost.
-  - You are about to drop the column `category_id` on the `products` table. All the data in the column will be lost.
-  - You are about to drop the column `colour` on the `products` table. All the data in the column will be lost.
-  - You are about to drop the `Discount` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `category` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `detail` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `product_discount` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `product_image` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `product_size` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `purchase_order` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `size` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `type` table. If the table is not empty, all the data it contains will be lost.
-  - Made the column `created_at` on table `addresses` required. This step will fail if there are existing NULL values in that column.
-  - Made the column `updated_at` on table `addresses` required. This step will fail if there are existing NULL values in that column.
-  - Made the column `created_at` on table `products` required. This step will fail if there are existing NULL values in that column.
-  - Made the column `updated_at` on table `products` required. This step will fail if there are existing NULL values in that column.
-  - Made the column `created_at` on table `users` required. This step will fail if there are existing NULL values in that column.
-  - Made the column `updated_at` on table `users` required. This step will fail if there are existing NULL values in that column.
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('PENDING', 'PAID', 'CANCELLED');
 
-*/
--- DropForeignKey
-ALTER TABLE "category" DROP CONSTRAINT "category_type_id_fkey";
+-- CreateEnum
+CREATE TYPE "SystemType" AS ENUM ('EU', 'US', 'UK', 'CM');
 
--- DropForeignKey
-ALTER TABLE "detail" DROP CONSTRAINT "detail_order_id_fkey";
+-- CreateEnum
+CREATE TYPE "PaymentMethod" AS ENUM ('CREDIT_CARD', 'DEBIT_CARD', 'CASH');
 
--- DropForeignKey
-ALTER TABLE "detail" DROP CONSTRAINT "detail_product_id_fkey";
+-- CreateTable
+CREATE TABLE "users" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT,
+    "lastName" TEXT,
+    "username" TEXT,
+    "email" TEXT,
+    "password" TEXT,
+    "role" "UserRole" NOT NULL DEFAULT 'CLIENT',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
 
--- DropForeignKey
-ALTER TABLE "product_discount" DROP CONSTRAINT "product_discount_id_discount_fkey";
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
 
--- DropForeignKey
-ALTER TABLE "product_discount" DROP CONSTRAINT "product_discount_id_product_fkey";
+-- CreateTable
+CREATE TABLE "addresses" (
+    "id" SERIAL NOT NULL,
+    "street" TEXT,
+    "town" TEXT,
+    "state" TEXT,
+    "cpi" TEXT,
+    "country" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
 
--- DropForeignKey
-ALTER TABLE "product_image" DROP CONSTRAINT "product_image_product_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "product_size" DROP CONSTRAINT "product_size_id_product_fkey";
-
--- DropForeignKey
-ALTER TABLE "product_size" DROP CONSTRAINT "product_size_id_size_fkey";
-
--- DropForeignKey
-ALTER TABLE "products" DROP CONSTRAINT "products_category_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "purchase_order" DROP CONSTRAINT "purchase_order_user_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "purchase_order" DROP CONSTRAINT "purchase_order_user_id_user_address_id_fkey";
-
--- AlterTable
-ALTER TABLE "addresses" ALTER COLUMN "created_at" SET NOT NULL,
-ALTER COLUMN "created_at" SET DEFAULT CURRENT_TIMESTAMP,
-ALTER COLUMN "updated_at" SET NOT NULL;
-
--- AlterTable
-ALTER TABLE "products" DROP COLUMN "brand",
-DROP COLUMN "category_id",
-DROP COLUMN "colour",
-ADD COLUMN     "brand_id" INTEGER,
-ADD COLUMN     "id_category" INTEGER,
-ADD COLUMN     "id_colour" INTEGER,
-ALTER COLUMN "created_at" SET NOT NULL,
-ALTER COLUMN "created_at" SET DEFAULT CURRENT_TIMESTAMP,
-ALTER COLUMN "updated_at" SET NOT NULL;
-
--- AlterTable
-ALTER TABLE "users" ALTER COLUMN "created_at" SET NOT NULL,
-ALTER COLUMN "created_at" SET DEFAULT CURRENT_TIMESTAMP,
-ALTER COLUMN "updated_at" SET NOT NULL;
-
--- DropTable
-DROP TABLE "Discount";
-
--- DropTable
-DROP TABLE "category";
-
--- DropTable
-DROP TABLE "detail";
-
--- DropTable
-DROP TABLE "product_discount";
-
--- DropTable
-DROP TABLE "product_image";
-
--- DropTable
-DROP TABLE "product_size";
-
--- DropTable
-DROP TABLE "purchase_order";
-
--- DropTable
-DROP TABLE "size";
-
--- DropTable
-DROP TABLE "type";
+    CONSTRAINT "addresses_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "categories" (
@@ -152,6 +91,23 @@ CREATE TABLE "discounts" (
 );
 
 -- CreateTable
+CREATE TABLE "products" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT,
+    "price" DOUBLE PRECISION,
+    "description" TEXT,
+    "image" TEXT,
+    "id_category" INTEGER,
+    "id_colour" INTEGER,
+    "brand_id" INTEGER,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+
+    CONSTRAINT "products_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "product_discounts" (
     "id_discount" INTEGER NOT NULL,
     "id_product" INTEGER NOT NULL,
@@ -186,7 +142,7 @@ CREATE TABLE "purchase_orders" (
     "user_id" INTEGER,
     "user_address_id" INTEGER,
     "total" DOUBLE PRECISION,
-    "payment_method" TEXT,
+    "payment_method" "PaymentMethod",
     "status" "Status",
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -208,6 +164,14 @@ CREATE TABLE "sizes" (
 );
 
 -- CreateTable
+CREATE TABLE "user_addresses" (
+    "user_id" INTEGER NOT NULL,
+    "address_id" INTEGER NOT NULL,
+
+    CONSTRAINT "user_addresses_pkey" PRIMARY KEY ("user_id","address_id")
+);
+
+-- CreateTable
 CREATE TABLE "brands" (
     "id" SERIAL NOT NULL,
     "name" TEXT,
@@ -222,12 +186,34 @@ CREATE TABLE "brands" (
 CREATE TABLE "colours" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "colours_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "categories_name_key" ON "categories"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "types_name_key" ON "types"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "products_name_key" ON "products"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "brands_name_key" ON "brands"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "colours_name_key" ON "colours"("name");
 
 -- AddForeignKey
 ALTER TABLE "categories" ADD CONSTRAINT "categories_type_id_fkey" FOREIGN KEY ("type_id") REFERENCES "types"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -267,3 +253,9 @@ ALTER TABLE "purchase_orders" ADD CONSTRAINT "purchase_orders_user_id_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "purchase_orders" ADD CONSTRAINT "purchase_orders_user_id_user_address_id_fkey" FOREIGN KEY ("user_id", "user_address_id") REFERENCES "user_addresses"("user_id", "address_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_addresses" ADD CONSTRAINT "user_addresses_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_addresses" ADD CONSTRAINT "user_addresses_address_id_fkey" FOREIGN KEY ("address_id") REFERENCES "addresses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

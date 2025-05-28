@@ -42,6 +42,12 @@ Para iniciar el servidor en modo desarrollo:
 npm run dev
 ```
 
+#Prisma STUDIO:
+```bash
+npx prisma studio
+```
+http://localhost:5555/
+
 Url de la api: http://localhost:3000
 
 ## Endpoints

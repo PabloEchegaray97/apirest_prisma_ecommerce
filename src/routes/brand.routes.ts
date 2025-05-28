@@ -16,7 +16,7 @@ router.put('/:id', validateJWT,  async (req: Request, res: Response) => {
 router.delete('/:id', validateJWT, async (req: Request, res: Response) => {
     await brandController.delete(req, res);
 });
-router.post('/register', async (req: Request, res: Response) => {
+router.post('/', validateJWT, async (req: Request, res: Response) => {
     await brandController.create(req, res);
 });
 

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { BaseService } from '../services/base.service';
+import { PaginationParams } from '../types/paginated';
 
 export abstract class BaseController<T, CreateInput, UpdateInput> {
     protected abstract service: BaseService<T, CreateInput, UpdateInput>;
@@ -7,8 +8,16 @@ export abstract class BaseController<T, CreateInput, UpdateInput> {
 
     async getAll(req: Request, res: Response) {
         try {
-            const entities = await this.service.findAll();
-            return res.status(200).json(entities);
+            // Extraer parámetros de paginación de la query
+            const paginationParams: PaginationParams = {
+                page: req.query.page ? parseInt(req.query.page as string) : 1,
+                limit: req.query.limit ? parseInt(req.query.limit as string) : 10,
+                sortBy: req.query.sortBy as string || 'id',
+                sortOrder: req.query.sortOrder as 'asc' | 'desc' || 'desc'
+            };
+
+            const result = await this.service.findAll(paginationParams);
+            return res.status(200).json(result);
         } catch (error) {
             console.error(`Error getting ${this.entityName}s:`, error);
             return res.status(500).json({ message: 'Internal server error' });
@@ -43,6 +52,9 @@ export abstract class BaseController<T, CreateInput, UpdateInput> {
             // manejar errores específicos de Prisma
             if (error.code === 'P2002') {
                 return res.status(400).json({ message: 'Duplicate entry' });
+            }
+            if (error.code === 'P2003') {
+                return res.status(400).json({ message: 'Foreign key constraint violation - Referenced entity does not exist' });
             }
             return res.status(500).json({ message: 'Internal server error' });
         }

@@ -16,8 +16,8 @@ router.put('/:id', validateJWT,  async (req: Request, res: Response) => {
 router.delete('/:id', validateJWT, async (req: Request, res: Response) => {
     await discountController.delete(req, res);
 });
-router.post('/register', async (req: Request, res: Response) => {
+router.post('/', validateJWT, async (req: Request, res: Response) => {
     await discountController.create(req, res);
 });
 
-export { router as detailRouter }; 
+export { router as discountRouter }; 
