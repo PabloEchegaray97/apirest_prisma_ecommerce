@@ -33,7 +33,7 @@ export class UserService extends BaseService<User, UserCreateInput, UserUpdateIn
             }
           }
         },
-        userAddress: {
+        usersAddress: {
           include: {
             address: true
           }

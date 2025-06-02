@@ -3,9 +3,9 @@ import { PaginationParams, PaginatedResult } from '../types/paginated';
 
 export abstract class BaseService<T, CreateInput, UpdateInput> {
   protected abstract modelName: string;
-  protected abstract selectFields: Record<string, any>;
+  protected selectFields: Record<string, any> = {};
   
-  // Nueva propiedad para definir qué relaciones incluir automáticamente
+  // Configuración de relaciones específica de cada servicio
   protected includeRelations: Record<string, any> = {};
 
   async findAll(params: PaginationParams = {}): Promise<PaginatedResult<T>> {
@@ -23,7 +23,7 @@ export abstract class BaseService<T, CreateInput, UpdateInput> {
     const orderBy: any = {};
     orderBy[sortBy] = sortOrder;
 
-    // Usar include si hay relaciones definidas, sino usar select
+    // Usar includeRelations si están definidas, sino usar selectFields
     const hasSelectFields = Object.keys(this.selectFields).length > 0;
     const hasIncludeRelations = Object.keys(this.includeRelations).length > 0;
     

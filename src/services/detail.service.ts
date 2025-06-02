@@ -19,7 +19,7 @@ export class DetailService extends BaseService<Detail, DetailCreateInput, Detail
     },
     purchaseOrder: {
       include: {
-        userAddress: {
+        usersAddress: {
           include: {
             user: {
               select: {

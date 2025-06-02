@@ -21,7 +21,7 @@ export class PurchaseOrderService extends BaseService<PurchaseOrder, PurchaseOrd
         }
       }
     },
-    userAddress: {
+    usersAddress: {
       include: {
         user: {
           select: {
